@@ -1,15 +1,15 @@
 #include "DeviceA.h"
 
-std::string DeviceA::getName()
+const std::string DeviceA::getName()
 {
   return this->m_name;
 } 
 
-std::string DeviceA::getDataAsString()
+const std::string DeviceA::getDataAsString()
 {
-  std::string dataAsString;
-  for (int i = 0; i < 3; ++I) 
-    dataAsString.append(std::to_string(this->m_data));
-  
+  const std::string dataAsString;
+  for (int i = 0; i < 3; ++i)
+    dataAsString.append(std::to_string(this->m_data[i]));
+
   return dataAsString;
 }

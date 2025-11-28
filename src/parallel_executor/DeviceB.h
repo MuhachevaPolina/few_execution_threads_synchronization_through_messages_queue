@@ -2,12 +2,12 @@
 
 #include "Device.h"
 
-class DeviceA: virtual public Device 
+class DeviceB: virtual public Device
 {
 public:
   const std::string getDataAsString();
   const std::string getName(); 
 private:
   const std::string m_name;
-  const std::string m_data;
+  std::string m_data;
 };
