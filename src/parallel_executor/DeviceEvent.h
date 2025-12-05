@@ -8,7 +8,7 @@
 class DeviceEvent: virtual public Event
 {
 public:
-  virtual DeviceEvent(std::shared_ptr<Device> device): m_device(device);
+  DeviceEvent(std::shared_ptr<Device> device): m_device(device) {}
 private:
   std::shared_ptr<Device> m_device;
 };

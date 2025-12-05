@@ -12,7 +12,7 @@ class EventQueue
 {
 public:
   EventQueue();
-  EventQueue(std::queue<std::shared_ptr<const Event>> queue): m_queue(queue);
+  EventQueue(std::queue<std::shared_ptr<const Event>> queue): m_queue(queue) {}
 //  put message into queue
   void push(const std::shared_ptr<const Event>& event);
 // delete message from queue and return it. if queue is empty and 

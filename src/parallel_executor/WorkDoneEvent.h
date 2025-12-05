@@ -1,11 +1,10 @@
 #pragma once
 
-#include "Event.h"
+#include "DeviceEvent.h"
 
 class WorkDoneEvent: virtual public DeviceEvent
 {
 public:
-  std::string toSting();
-private:
-  
+  WorkDoneEvent();
+  virtual const std::string toSting() const;
 };

@@ -12,7 +12,7 @@ std::shared_ptr<const Event> EventQueue::pop(const std::chrono::seconds& duratio
 
   while (std::chrono::steady_clock::now() - start_time < duration)
   {
-    if (!queue.empty())
+    if (!this->m_queue.empty())
     {
       tmp_ev = this->m_queue.front();
       this->m_queue.pop();
