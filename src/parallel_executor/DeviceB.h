@@ -10,4 +10,5 @@ public:
 private:
   const std::string m_name;
   std::string m_data;
+  const EventQueue m_queue;
 };

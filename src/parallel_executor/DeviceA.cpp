@@ -13,3 +13,8 @@ const std::string DeviceA::getDataAsString()
 
   return dataAsString;
 }
+
+void DeviceA::readA()
+{
+
+}
