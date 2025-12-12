@@ -4,5 +4,5 @@
 class Event 
 {
 public:
-  virtual const std::string toString() const;
+  virtual const std::string toString() const = 0;
 };

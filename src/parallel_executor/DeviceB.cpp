@@ -1,11 +1,11 @@
 #include "DeviceB.h"
 
-const std::string DeviceA::getName()
+const std::string DeviceB::getName()
 {
   return this->m_name;
 } 
 
-const std::string DeviceA::getDataAsString()
+const std::string DeviceB::getDataAsString()
 {
   return this->m_data;
 }

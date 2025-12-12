@@ -5,6 +5,7 @@
 class DeviceB: virtual public Device
 {
 public:
+  DeviceB() {}
   const std::string getDataAsString();
   const std::string getName(); 
 private:
