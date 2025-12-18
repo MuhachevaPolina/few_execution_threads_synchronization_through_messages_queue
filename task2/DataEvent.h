@@ -1,9 +1,9 @@
 #pragma once
 #include "DeviceEvent.h"
 
-class StartedEvent : public DeviceEvent 
+class DataEvent : public DeviceEvent 
 {
 public:
-    StartedEvent(std::shared_ptr<Device> device);
+    DataEvent(std::shared_ptr<Device> device);
     std::string toString() const override;
 };

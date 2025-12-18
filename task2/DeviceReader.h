@@ -1,25 +1,32 @@
 #pragma once
-
-#include "Device.h"
 #include "EventQueue.h"
+#include "Device.h"
 
 #include <memory>
 #include <thread>
 #include <atomic>
+#include <iostream>
 
-class DeviceReader
-{
+class DeviceReader {
 public:
-  DeviceReader(std::shared_ptr<Device> device,std::shared_ptr<EventQueue> m_queue,
-  std::thread readingThread): m_device(device), m_queue(queue), m_readingThread(readingThread){}
-  
-  void start();
-  void stop();
-private:
-  std::shared_ptr<Device> m_device; 
-  std::shared_ptr<EventQueue> m_queue;
-  std::atomic<bool> isRunning{false};
-  std::thread m_readingThread;
+    DeviceReader(std::shared_ptr<Device> device, 
+                 std::shared_ptr<EventQueue> eventQueue);
+    ~DeviceReader();
+    
+    void start();
+    void stop();
+    void join();
+    
+    DeviceReader(const DeviceReader&) = delete;
+    DeviceReader& operator=(const DeviceReader&) = delete;
+    DeviceReader(DeviceReader&&) = default;
+    DeviceReader& operator=(DeviceReader&&) = default;
 
-  void readingProcess();
+private:
+    std::shared_ptr<Device> m_device;
+    std::shared_ptr<EventQueue> m_eventQueue;
+    std::thread m_readerThread;
+    std::atomic<bool> m_running{false};
+    
+    void readingLoop();
 };
