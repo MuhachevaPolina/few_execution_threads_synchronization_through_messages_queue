@@ -1,19 +1,148 @@
-#include "src/parallel_executor/EventQueue.h"
-#include "src/parallel_executor/WorkDoneEvent.h"
-#include "src/parallel_executor/DeviceB.h"
-
 #include <iostream>
 #include <memory>
 #include <chrono>
+#include <thread>
+#include <string>
 
-int main()
+#include "src/EventQueue.h"
+#include "src/DeviceA.h"
+#include "src/DeviceB.h"
+#include "src/DeviceReader.h"
+#include "src/WorkDoneEvent.h"
+#include "src/DataEvent.h"
+#include "src/StartedEvent.h"
+
+void printUsage() 
 {
-  EventQueue queue;
-  std::shared_ptr<Device> dev(new DeviceB());
-  std::shared_ptr<const Event> ev(new const WorkDoneEvent(dev));
-  queue.push(ev);
-  auto gottenEv = queue.pop(std::chrono::seconds(10));
-  //Event* gottenEv = gottenPtr.get();
-  std::cout << gottenEv->toString() << std::endl;
-  return 0;
+  std::cout << "Использование:\n";
+  std::cout << "  ./prog [опции]\n";
+  std::cout << "Опции:\n";
+  std::cout << "  -a N    DeviceA ломается после N чтений (по умолчанию: никогда)\n";
+  std::cout << "  -b N    DeviceB ломается после N чтений (по умолчанию: никогда)\n";
+  std::cout << "  -h      Показать эту справку\n";
+}
+
+int main(int argc, char* argv[]) 
+{
+  int deviceAFailAfter = -1;
+  int deviceBFailAfter = -1;
+    
+  for (int i = 1; i < argc; ++i) 
+  {
+    std::string arg = argv[i];
+    if (arg == "-a" && i + 1 < argc) 
+    {
+      deviceAFailAfter = std::stoi(argv[++i]);
+    } else if (arg == "-b" && i + 1 < argc) 
+    {
+      deviceBFailAfter = std::stoi(argv[++i]);
+    } else if (arg == "-h") 
+    {
+      printUsage();
+      return 0;
+    }
+  }
+    
+  std::cout << "DeviceA сломается после " 
+              << (deviceAFailAfter > 0 ? std::to_string(deviceAFailAfter) : "never") 
+              << " чтений\n";
+  std::cout << "DeviceB сломается после " 
+              << (deviceBFailAfter > 0 ? std::to_string(deviceBFailAfter) : "never") 
+              << " чтений\n";
+  std::cout << std::endl;
+    
+  try 
+  {
+    auto deviceA = std::make_shared<DeviceA>(deviceAFailAfter);
+    auto deviceB = std::make_shared<DeviceB>(deviceBFailAfter);
+    auto eventQueue = std::make_shared<EventQueue>();
+        
+    DeviceReader readerA(deviceA, eventQueue);
+    DeviceReader readerB(deviceB, eventQueue);
+        
+    readerA.start();
+    readerB.start();
+        
+    std::cout << "=== Начало обработки событий ===\n\n";
+        
+    bool deviceADone = false;
+    bool deviceBDone = false;
+    auto lastEventTime = std::chrono::steady_clock::now();
+        
+    while (!(deviceADone && deviceBDone)) 
+    {
+      auto event = eventQueue->pop(std::chrono::seconds(5));
+            
+      if (event) {
+        std::cout << event->toString() << std::endl;
+        lastEventTime = std::chrono::steady_clock::now();
+                
+        auto workDoneEvent = std::dynamic_pointer_cast<const WorkDoneEvent>(event);
+        if (workDoneEvent) 
+        {
+          auto device = workDoneEvent->getDevice();
+          if (device->getName() == "DeviceA") 
+          {
+            deviceADone = true;
+            std::cout << ">>> DeviceA завершил работу\n";
+          } else if (device->getName() == "DeviceB") 
+          {
+            deviceBDone = true;
+                        std::cout << ">>> DeviceB завершил работу\n";
+          }
+        }
+      } else 
+      {
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(
+            now - lastEventTime);
+                
+        if (elapsed.count() >= 5) 
+        {
+          std::cout << "\nНет событий в течение 5 секунд!\n";
+                   
+          if (!deviceA->isWorking() && !deviceB->isWorking()) 
+          {
+            std::cout << "Оба устройства не работают. Завершение\n";
+            break;
+          } else if (!deviceA->isWorking()) 
+          {
+            std::cout << "DeviceA не работает, продолжаем с DeviceB\n";
+            deviceADone = true;
+          } else if (!deviceB->isWorking()) 
+          {
+            std::cout << "DeviceB не работает, продолжаем с DeviceA\n";
+            deviceBDone = true;
+          }
+                    
+          lastEventTime = now;
+        }
+      }
+            
+      if (deviceADone && !deviceBDone && !deviceB->isWorking()) 
+      {
+        deviceBDone = true;
+      }
+      if (deviceBDone && !deviceADone && !deviceA->isWorking()) 
+      {
+        deviceADone = true;
+      }
+    }
+        
+    readerA.stop();
+    readerB.stop();
+    eventQueue->stop();
+       
+    readerA.join();
+    readerB.join();
+        
+    std::cout << "\n=== Приложение завершено ===\n";
+        
+  } catch (const std::exception& e) 
+  {
+    std::cerr << "Ошибка: " << e.what() << std::endl;
+    return 1;
+  }
+    
+    return 0;
 }

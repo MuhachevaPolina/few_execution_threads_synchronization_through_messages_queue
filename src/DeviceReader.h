@@ -7,7 +7,8 @@
 #include <atomic>
 #include <iostream>
 
-class DeviceReader {
+class DeviceReader 
+{
 public:
   DeviceReader(std::shared_ptr<Device> device, std::shared_ptr<EventQueue> eventQueue);
   ~DeviceReader();

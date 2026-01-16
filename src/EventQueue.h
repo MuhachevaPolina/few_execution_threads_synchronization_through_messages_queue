@@ -8,7 +8,8 @@
 #include <condition_variable>
 #include <chrono>
 
-class EventQueue {
+class EventQueue 
+{
 public:
   EventQueue() = default;
   ~EventQueue();

@@ -5,5 +5,10 @@ project(parallel_executor VERSION 1.0.0 DESCRIPTION "Синхронизация 
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-enable_testing()
-add_subdirectory(test)
+set(SOURCE_EXE main.cpp)
+add_executable(main ${SOURCE_EXE})
+add_subdirectory(src)
+target_link_libraries(main device)
+
+# enable_testing()
+# add_subdirectory(test)

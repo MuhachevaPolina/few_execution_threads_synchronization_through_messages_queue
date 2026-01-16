@@ -3,21 +3,25 @@
 
 DeviceB::DeviceB(int failureAfter) : m_failureAfter(failureAfter) {}
 
-std::string DeviceB::getName() const {
+std::string DeviceB::getName() const 
+{
   return this->m_name;
 }
 
-std::string DeviceB::getDataAsString() const {
+std::string DeviceB::getDataAsString() const 
+{
   return "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + 
     std::to_string(this->m_data3) + "]";
 }
 
-bool DeviceB::read() {
+bool DeviceB::read() 
+{
   if (!this->m_working.load()) return false;
     
   int currentCount = ++this->m_readCount;
     
-  if (this->m_failureAfter > 0 && currentCount >= this->m_failureAfter) {
+  if (this->m_failureAfter > 0 && currentCount >= this->m_failureAfter) 
+  {
     this->m_working.store(false);
     std::cout << "DeviceB перестал работать после " << currentCount << " чтений\n";
     return false;
@@ -36,10 +40,12 @@ bool DeviceB::read() {
   return true;
 }
 
-bool DeviceB::isWorking() const {
+bool DeviceB::isWorking() const 
+{
   return this->m_working.load();
 }
 
-void DeviceB::stop() {
+void DeviceB::stop() 
+{
   this->m_working.store(false);
 }

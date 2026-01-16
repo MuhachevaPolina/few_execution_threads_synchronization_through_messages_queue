@@ -5,7 +5,8 @@
 #include <chrono>
 #include <thread>
 
-class DeviceB : public Device {
+class DeviceB : public Device 
+{
 public:
   DeviceB(int failureAfter = -1);
     std::string getName() const override;
