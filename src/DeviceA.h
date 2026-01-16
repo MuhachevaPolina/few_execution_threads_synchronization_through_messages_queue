@@ -16,6 +16,7 @@ class DeviceA : public Device
       bool read() override;
       bool isWorking() const override;
       void stop() override;
+      std::string generateRandomString();
 
   private:
       std::string m_name = "DeviceA";
@@ -23,6 +24,4 @@ class DeviceA : public Device
       std::atomic<bool> m_working{true};
       std::atomic<int> m_readCount{0};
       int m_failureAfter;
-      
-      std::string generateRandomString();
   };
