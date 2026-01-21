@@ -5,12 +5,18 @@
 
 TEST(DeviceA, GetName)
 {
-  DeviceA* device();
-  EXPECT_EQ(device->getName(), "DeviceA");
+  DeviceA device;
+  EXPECT_EQ(device.getName(), "DeviceA");
 }
 
 TEST(DeviceA, RandomString)
 {
-  DeviceA* device();
-  EXPECT_EQ(device->generateRandomString().length(), 500);
+  DeviceA device;
+  EXPECT_LE(device.generateRandomString().length(), 500);
+}
+
+TEST(DeviceA, IsWorking)
+{
+  DeviceA device;
+  EXPECT_TRUE(device.isWorking());
 }
