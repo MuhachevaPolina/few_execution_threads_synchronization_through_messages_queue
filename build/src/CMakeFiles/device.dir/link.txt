@@ -1,2 +1,0 @@
-/usr/bin/ar qc libdevice.a CMakeFiles/device.dir/DataEvent.cpp.o CMakeFiles/device.dir/DeviceA.cpp.o CMakeFiles/device.dir/DeviceB.cpp.o CMakeFiles/device.dir/DeviceEvent.cpp.o CMakeFiles/device.dir/DeviceReader.cpp.o CMakeFiles/device.dir/EventQueue.cpp.o CMakeFiles/device.dir/StartedEvent.cpp.o CMakeFiles/device.dir/WorkDoneEvent.cpp.o
-/usr/bin/ranlib libdevice.a
