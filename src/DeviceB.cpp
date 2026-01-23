@@ -10,8 +10,10 @@ std::string DeviceB::getName() const
 
 std::string DeviceB::getDataAsString() const 
 {
+  // std::cout << "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + 
+  // std::to_string(this->m_data3) + "]" << std::endl;
   return "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + 
-    std::to_string(this->m_data3) + "]";
+  std::to_string(this->m_data3) + "]";
 }
 
 bool DeviceB::read() 

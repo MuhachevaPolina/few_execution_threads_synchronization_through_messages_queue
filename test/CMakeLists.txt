@@ -2,6 +2,8 @@ add_executable(test_device
     DeviceA_Tests.cpp
     DeviceB_Tests.cpp
     EventQueue_Tests.cpp
+    DeviceReader_Tests.cpp
+    utilities_Tests.cpp
 )
 
 target_link_libraries(test_device

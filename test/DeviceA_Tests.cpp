@@ -13,6 +13,7 @@ TEST(DeviceA, RandomString)
 {
   DeviceA device;
   EXPECT_LE(device.generateRandomString().length(), 500);
+  EXPECT_GT(device.generateRandomString().length(), 0);
 }
 
 TEST(DeviceA, IsWorking)
