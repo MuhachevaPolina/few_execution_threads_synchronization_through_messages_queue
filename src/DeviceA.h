@@ -3,25 +3,24 @@
 #include "Device.h"
 
 #include <atomic>
-#include <random>
-#include <chrono>
-#include <thread>
 
-class DeviceA : public Device 
+class DeviceA: public Device
 {
-  public:
-      DeviceA(int failureAfter = -1);
-      std::string getName() const override;
-      std::string getDataAsString() const override;
-      bool read() override;
-      bool isWorking() const override;
-      void stop() override;
-      std::string generateRandomString();
+public:
+    DeviceA(int failureAfter);
+    DeviceA();
 
-  private:
-      std::string m_name = "DeviceA";
-      std::string m_data;
-      std::atomic<bool> m_working{true};
-      std::atomic<int> m_readCount{0};
-      int m_failureAfter;
-  };
+    std::string getName();
+    std::string getDataAsString();
+    bool read();
+    bool isWorking();
+    void stop();
+private:
+    std::string generateString();
+
+    std::string m_name;
+    std::string m_data;
+    std::atomic<bool> m_working;
+    std::atomic<int> m_readCount;
+    int m_failureAfter;
+};

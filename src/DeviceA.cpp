@@ -1,65 +1,42 @@
 #include "DeviceA.h"
-#include <iostream>
 
-DeviceA::DeviceA(int failureAfter) : m_failureAfter(failureAfter) {}
+#include <cstdlib>
 
-std::string DeviceA::getName() const 
+DeviceA::DeviceA(int failureAfter): m_failureAfter(failureAfter), 
+m_name("DeviceA"), m_working(true), m_readCount(0) {}
+
+DeviceA::DeviceA(): m_failureAfter(0), 
+m_name("DeviceA"), m_working(true), m_readCount(0) {}
+
+std::string DeviceA::getName()
 {
-  return this->m_name;
+    return this->m_name;
 }
 
-std::string DeviceA::getDataAsString() const 
+std::string DeviceA::getDataAsString()
 {
-  return this->m_data;
+    return this->m_data;
 }
 
-std::string DeviceA::generateRandomString() 
+bool DeviceA::isWorking()
 {
-  static const char symbols[] =
-    "0123456789"
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "abcdefghijklmnopqrstuvwxyz";
-
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distrib(0, sizeof(symbols) - 2);
-  std::uniform_int_distribution<> lenDistrib(0, 500);
-
-  int length = lenDistrib(gen);
-  std::string result;
-
-  for (int i = 0; i < length; ++i) 
-  {
-    result += symbols[distrib(gen)];
-  }
-    
-  return result;
+    return this->m_working;
 }
 
-bool DeviceA::read() 
+void DeviceA::stop()
 {
-  if (!this->m_working.load()) return false;
-    
-  int currentCount = ++this->m_readCount;
-    
-  if (this->m_failureAfter > 0 && currentCount >= this->m_failureAfter) {
-    this->m_working.store(false);
-    std::cout << "DeviceA перестал работать после " << currentCount << " чтений\n";
-    return false;
-  }
-    
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  this->m_data = generateRandomString();
-    
-  return true;
+    this->m_working = false;
 }
 
-bool DeviceA::isWorking() const 
+bool DeviceA::read()
 {
-  return this->m_working.load();
+    this->m_data = this->generateString();
 }
 
-void DeviceA::stop() 
+std::string DeviceA::generateString()
 {
-  this->m_working.store(false);
+    int length = std::rand() % 501;
+
+    std::string str(length, 'a');
+    return str;
 }
