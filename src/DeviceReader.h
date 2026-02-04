@@ -8,6 +8,7 @@
 class DeviceReader
 {
 public:
+  DeviceReader(std::shared_ptr<Device> dev, std::shared_ptr<EventQueue> queue);
   void read(int deviceBrokenAfter);
 private:
   void readingLoop(int deviceBrokenAfter);

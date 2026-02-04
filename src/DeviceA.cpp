@@ -2,11 +2,9 @@
 
 #include <cstdlib>
 
-DeviceA::DeviceA(int failureAfter): m_failureAfter(failureAfter), 
-m_name("DeviceA"), m_working(true), m_readCount(0) {}
+DeviceA::DeviceA(int failureAfter): Device(failureAfter, "DeviceA") {}
 
-DeviceA::DeviceA(): m_failureAfter(0), 
-m_name("DeviceA"), m_working(true), m_readCount(0) {}
+DeviceA::DeviceA(): Device(-1, "DeviceA") {} {}
 
 std::string DeviceA::getName()
 {

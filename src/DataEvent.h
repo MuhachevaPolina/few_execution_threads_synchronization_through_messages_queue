@@ -5,6 +5,6 @@
 class DataEvent: public DeviceEvent
 {
 public:
-    DataEvent(std::shared_ptr<Device> device);
-    std::string toString();
+  DataEvent(std::shared_ptr<Device> device);
+  std::string toString();
 };
