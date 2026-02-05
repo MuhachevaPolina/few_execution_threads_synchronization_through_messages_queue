@@ -10,7 +10,7 @@ int main()
   int deviceABrokenAfter = -1, deviceBBrokenAfter = -1;
   std::cin >> deviceABrokenAfter >> deviceBBrokenAfter;
 
-  std::shared_ptr<EventQueue> queue;
+  std::shared_ptr<EventQueue> queue = std::make_shared<EventQueue>();
 
   std::shared_ptr<Device> devA(new DeviceA);
   std::shared_ptr<Device> devB(new DeviceB);
@@ -26,8 +26,11 @@ int main()
 
   while (ev != nullptr)
   {
+    if (ev != nullptr)
+    {
+      std::cout << ev->toString() << std::endl;
+    }
     ev = queue->pop(dur);
-    std::cout << ev->toString() << std::endl;
   }
 
   return 0;

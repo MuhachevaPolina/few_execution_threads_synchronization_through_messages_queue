@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-DeviceB::DeviceB(): Device("DeviceB") {} 
+DeviceB::DeviceB(): Device("DeviceB"), m_data1(0), m_data2(0), m_data3(0) {} 
 
 std::string DeviceB::getName()
 {

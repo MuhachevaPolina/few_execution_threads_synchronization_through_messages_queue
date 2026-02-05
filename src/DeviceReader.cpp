@@ -12,21 +12,28 @@ DeviceReader::DeviceReader(std::shared_ptr<Device> dev, std::shared_ptr<EventQue
 
 void DeviceReader::read()
 {
-  std::thread thr(&DeviceReader::readingLoop, this, this->m_deviceBrokenAfter);
+  std::thread thr([this]() {
+    this->readingLoop();
+  });
+  thr.detach();
 }
 
 void DeviceReader::readingLoop()
 {
-  std::shared_ptr<Event> startEv(new StartedEvent(this->m_dev));
+  std::shared_ptr<const Event> startEv(new StartedEvent(this->m_dev));
   startEv->toString();
   this->m_queue->push(startEv);
 
   for (int i = 0; i < this->m_deviceBrokenAfter; i++)
   {
-    std::shared_ptr<Event> dataEv(new DataEvent(this->m_dev));
+    std::shared_ptr<const Event> dataEv(new DataEvent(this->m_dev));
     this->m_dev->read();
     dataEv->toString();
     this->m_queue->push(dataEv);
   }
-}
 
+  this->m_dev->stop();
+  std::shared_ptr<const Event> doneEv(new WorkDoneEvent(this->m_dev));
+  doneEv->toString();
+  this->m_queue->push(doneEv);
+}

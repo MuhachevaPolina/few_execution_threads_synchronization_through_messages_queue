@@ -15,9 +15,5 @@ public:
   bool isWorking();
   void stop();
 private:
-  std::string m_name;
   int m_data1, m_data2, m_data3;
-  std::atomic<bool> m_working;
-  std::atomic<int> m_readCount;
-  int m_failureAfter;
 };

@@ -6,7 +6,6 @@ class DeviceA: public Device
 {
 public:
   DeviceA();
-  DeviceA();
 
   std::string getName();
   std::string getDataAsString();
