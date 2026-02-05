@@ -2,9 +2,7 @@
 
 #include <cstdlib>
 
-DeviceB::DeviceB(int failureAfter): Device(failureAfter, "DeviceB") {}
-
-DeviceB::DeviceB(): Device(-1, "DeviceB") {} 
+DeviceB::DeviceB(): Device("DeviceB") {} 
 
 std::string DeviceB::getName()
 {

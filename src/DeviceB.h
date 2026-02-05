@@ -7,7 +7,6 @@
 class DeviceB: public Device
 {
 public:
-  DeviceB(int failureAfter);
   DeviceB();
     
   std::string getName();

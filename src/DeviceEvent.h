@@ -12,5 +12,5 @@ public:
   std::shared_ptr<Device> DeviceEvent::getDevice() const;
 protected:
   std::shared_ptr<Device> m_device;
-  std::string m_data;
+  std::shared_ptr<DataStorage> m_data;
 };

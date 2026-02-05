@@ -6,7 +6,7 @@
 class Device
 {
 public:
-  Device(int failureAfter, std::string name);
+  Device(std::string name);
 
   virtual std::string getName() = 0;
   virtual std::string getDataAsString() = 0;
@@ -15,7 +15,6 @@ public:
   virtual void stop() = 0;
 
 protected:
-  int m_failureAfter;
   std::string m_name;
   std::atomic<bool> m_working;
   std::atomic<int> m_readCount;
