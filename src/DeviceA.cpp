@@ -4,7 +4,7 @@
 
 DeviceA::DeviceA(int failureAfter): Device(failureAfter, "DeviceA") {}
 
-DeviceA::DeviceA(): Device(-1, "DeviceA") {} {}
+DeviceA::DeviceA(): Device(-1, "DeviceA") {} 
 
 std::string DeviceA::getName()
 {
@@ -26,7 +26,7 @@ void DeviceA::stop()
   this->m_working = false;
 }
 
-bool DeviceA::read()
+void DeviceA::read()
 {
   this->m_data = this->generateString();
 }

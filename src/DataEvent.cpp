@@ -5,5 +5,6 @@ DataEvent::DataEvent(std::shared_ptr<Device> device)
 
 std::string DataEvent::toString()
 {
-    return "Data from " + this->m_device->getName() + ": " + this->m_device->getDataAsString();
+    this->m_data = this->m_device->getDataAsString();
+    return this->m_data;
 }

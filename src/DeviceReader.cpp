@@ -1,5 +1,9 @@
 #include "DeviceReader.h"
 
+#include "DataEvent.h"
+#include "StartedEvent.h"
+#include "WorkDoneEvent.h"
+
 #include <thread>
 #include <iostream>
 
@@ -8,16 +12,21 @@ DeviceReader::DeviceReader(std::shared_ptr<Device> dev, std::shared_ptr<EventQue
 
 void DeviceReader::read(int deviceBrokenAfter)
 {
-  std::thread thr{this->readingLoop};
+  std::thread thr(&DeviceReader::readingLoop, this, deviceBrokenAfter);
 }
 
 void DeviceReader::readingLoop(int deviceBrokenAfter)
 {
+  std::shared_ptr<Event> startEv(new StartedEvent(this->m_dev));
+  startEv->toString();
+  this->m_queue->push(startEv);
+
   for (int i = 0; i < deviceBrokenAfter; i++)
   {
+    std::shared_ptr<Event> dataEv(new DataEvent(this->m_dev));
     this->m_dev->read();
-    std::string data = this->m_dev->getDataAsString();
-    this->m_queue->push(data);
+    dataEv->toString();
+    this->m_queue->push(dataEv);
   }
 }
 

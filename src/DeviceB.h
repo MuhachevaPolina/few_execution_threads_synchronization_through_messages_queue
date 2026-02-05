@@ -12,7 +12,7 @@ public:
     
   std::string getName();
   std::string getDataAsString();
-  bool read();
+  void read();
   bool isWorking();
   void stop();
 private:
