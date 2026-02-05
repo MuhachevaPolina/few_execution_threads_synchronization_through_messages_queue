@@ -26,6 +26,14 @@ void DeviceReader::readingLoop()
 
   for (int i = 0; i < this->m_deviceBrokenAfter; i++)
   {
+    if (this->m_dev->getName() == "DeviceA")
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    else if (this->m_dev->getName() == "DeviceB")
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
     std::shared_ptr<const Event> dataEv(new DataEvent(this->m_dev));
     this->m_dev->read();
     dataEv->toString();

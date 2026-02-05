@@ -21,16 +21,26 @@ int main()
   readerA->read();
   readerB->read();
 
-  std::chrono::seconds dur = std::chrono::seconds(5);
-  std::shared_ptr<const Event> ev = queue->pop(dur);
+  std::chrono::seconds dur = std::chrono::seconds(6);
+  std::shared_ptr<const Event> ev;
+  int evAmount = deviceABrokenAfter + deviceBBrokenAfter + 4;
+  int evCounter = 0;
 
-  while (ev != nullptr)
+  while (evCounter < evAmount)
   {
+    ev = queue->pop(dur);
     if (ev != nullptr)
     {
       std::cout << ev->toString() << std::endl;
+      ++evCounter;
     }
-    ev = queue->pop(dur);
+    else
+    {
+      if (!devA->isWorking() && !devB->isWorking())
+      {
+        break;
+      }
+    }
   }
 
   return 0;
