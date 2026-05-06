@@ -8,8 +8,8 @@ find_package(GTest REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-set(SOURCE_EXE main.cpp)
-add_executable(main ${SOURCE_EXE})
+# set(SOURCE_EXE main.cpp)
+# add_executable(main ${SOURCE_EXE})
 add_subdirectory(src)
-# add_subdirectory(test)
-target_link_libraries(main device)
+add_subdirectory(test)
+# target_link_libraries(main device)

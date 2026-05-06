@@ -2,7 +2,7 @@
 
 void DataStorage::setData(std::string data)
 {
-    if (this->m_data == "")
+    if(this->m_data == "")
     {
         this->m_data = data;
     }

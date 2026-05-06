@@ -11,7 +11,7 @@ std::string DeviceB::getName()
 
 std::string DeviceB::getDataAsString()
 {
- return std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + std::to_string(this->m_data3);
+ return "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + std::to_string(this->m_data3) + "]";
 }
 
 bool DeviceB::isWorking()
@@ -29,4 +29,10 @@ void DeviceB::read()
   this->m_data1 = std::rand() % 199;
   this->m_data2 = std::rand() % 199;
   this->m_data3 = std::rand() % 199;
+  this->m_readCount++;
+}
+
+int DeviceB::getReadCount()
+{
+  return this->m_readCount;
 }

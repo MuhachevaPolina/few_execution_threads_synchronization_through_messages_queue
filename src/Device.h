@@ -13,6 +13,7 @@ public:
   virtual void read() = 0;
   virtual bool isWorking() = 0;
   virtual void stop() = 0;
+  virtual int getReadCount() = 0;
 
 protected:
   std::string m_name;

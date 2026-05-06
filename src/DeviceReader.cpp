@@ -24,13 +24,13 @@ void DeviceReader::readingLoop()
   startEv->toString();
   this->m_queue->push(startEv);
 
-  for (int i = 0; i < this->m_deviceBrokenAfter; i++)
+  while(this->m_dev->getReadCount() < this->m_deviceBrokenAfter)
   {
-    if (this->m_dev->getName() == "DeviceA")
+    if(this->m_dev->getName() == "DeviceA")
     {
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    else if (this->m_dev->getName() == "DeviceB")
+    else if(this->m_dev->getName() == "DeviceB")
     {
       std::this_thread::sleep_for(std::chrono::seconds(5));
     }

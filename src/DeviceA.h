@@ -12,6 +12,7 @@ public:
   void read();
   bool isWorking();
   void stop();
+  int getReadCount();
 private:
   std::string generateString();
 

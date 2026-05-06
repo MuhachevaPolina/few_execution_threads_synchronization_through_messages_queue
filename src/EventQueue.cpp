@@ -14,7 +14,7 @@ std::shared_ptr<const Event> EventQueue::pop(std::chrono::seconds& duration)
 {
   std::unique_lock<std::mutex> lock(this->m_mtx);
 
-  if (this->m_condVar.wait_for(lock, duration, 
+  if(this->m_condVar.wait_for(lock, duration, 
         [this]() { return !this->m_queue.empty(); }))
   {
     auto event = this->m_queue.front();

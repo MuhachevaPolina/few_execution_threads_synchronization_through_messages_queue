@@ -14,6 +14,7 @@ public:
   void read();
   bool isWorking();
   void stop();
+  int getReadCount();
 private:
   int m_data1, m_data2, m_data3;
 };

@@ -27,6 +27,7 @@ void DeviceA::stop()
 void DeviceA::read()
 {
   this->m_data = this->generateString();
+  this->m_readCount++;
 }
 
 std::string DeviceA::generateString()
@@ -35,4 +36,9 @@ std::string DeviceA::generateString()
 
   std::string str(length, 'a');
   return str;
+}
+
+int DeviceA::getReadCount()
+{
+  return this->m_readCount;
 }
