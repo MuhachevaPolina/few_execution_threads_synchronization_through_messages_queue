@@ -2,7 +2,8 @@
 
 StartedEvent::StartedEvent(std::shared_ptr<Device> device): DeviceEvent(device) {}
 
-std::string StartedEvent::toString() const 
+std::string StartedEvent::toString() const
 {
-  return "Started: Device " + this->m_device->getName() + " начал работу";
+  this->m_data->setData("Started: Device " + this->m_device->getName() + " started its work");
+  return this->m_data->getData();
 }

@@ -1,9 +1,11 @@
-#pragma once
-#include "DeviceEvent.h"
+#pragma once 
 
-class DataEvent : public DeviceEvent 
+#include "DeviceEvent.h"
+#include "DataStorage.h"
+
+class DataEvent: public DeviceEvent
 {
 public:
-    DataEvent(std::shared_ptr<Device> device);
-    std::string toString() const override;
+  DataEvent(std::shared_ptr<Device> device);
+  std::string toString() const;
 };

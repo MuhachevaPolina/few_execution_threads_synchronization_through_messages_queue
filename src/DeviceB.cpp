@@ -1,53 +1,38 @@
 #include "DeviceB.h"
-#include <iostream>
 
-DeviceB::DeviceB(int failureAfter) : m_failureAfter(failureAfter) {}
+#include <cstdlib>
 
-std::string DeviceB::getName() const 
+DeviceB::DeviceB(): Device("DeviceB"), m_data1(0), m_data2(0), m_data3(0) {} 
+
+std::string DeviceB::getName()
 {
   return this->m_name;
 }
 
-std::string DeviceB::getDataAsString() const 
+std::string DeviceB::getDataAsString()
 {
-  // std::cout << "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + 
-  // std::to_string(this->m_data3) + "]" << std::endl;
-  return "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + 
-  std::to_string(this->m_data3) + "]";
+ return "[" + std::to_string(this->m_data1) + ", " + std::to_string(this->m_data2) + ", " + std::to_string(this->m_data3) + "]";
 }
 
-bool DeviceB::read() 
+bool DeviceB::isWorking()
 {
-  if (!this->m_working.load()) return false;
-    
-  int currentCount = ++this->m_readCount;
-    
-  if (this->m_failureAfter > 0 && currentCount >= this->m_failureAfter) 
-  {
-    this->m_working.store(false);
-    std::cout << "DeviceB перестал работать после " << currentCount << " чтений\n";
-    return false;
-  }
-    
-  std::this_thread::sleep_for(std::chrono::seconds(5));
-    
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distrib(0, 198);
-    
-  this->m_data1 = distrib(gen);
-  this->m_data2 = distrib(gen);
-  this->m_data3 = distrib(gen);
-    
-  return true;
+  return this->m_working;
 }
 
-bool DeviceB::isWorking() const 
+void DeviceB::stop()
 {
-  return this->m_working.load();
+  this->m_working = false;
 }
 
-void DeviceB::stop() 
+void DeviceB::read()
 {
-  this->m_working.store(false);
+  this->m_data1 = std::rand() % 199;
+  this->m_data2 = std::rand() % 199;
+  this->m_data3 = std::rand() % 199;
+  this->m_readCount++;
+}
+
+int DeviceB::getReadCount()
+{
+  return this->m_readCount;
 }

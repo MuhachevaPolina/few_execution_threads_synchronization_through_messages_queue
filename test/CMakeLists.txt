@@ -1,7 +1,6 @@
 add_executable(test_device
-    DeviceA_Tests.cpp
-    DeviceB_Tests.cpp
-    EventQueue_Tests.cpp
+    Devices_Tests.cpp
+    EventQueueAndEvents_Tests.cpp
     DeviceReader_Tests.cpp
     utilities_Tests.cpp
 )

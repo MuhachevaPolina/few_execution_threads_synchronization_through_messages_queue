@@ -1,67 +1,47 @@
 #include "DeviceReader.h"
-#include "StartedEvent.h"
+
 #include "DataEvent.h"
+#include "StartedEvent.h"
 #include "WorkDoneEvent.h"
 
-DeviceReader::DeviceReader(std::shared_ptr<Device> device, std::shared_ptr<EventQueue> eventQueue)
-  : m_device(device), m_eventQueue(eventQueue) {}
+#include <thread>
+#include <iostream>
 
-DeviceReader::~DeviceReader() 
+DeviceReader::DeviceReader(std::shared_ptr<Device> dev, std::shared_ptr<EventQueue> queue, int deviceBrokenAfter)
+: m_dev(dev), m_queue(queue), m_deviceBrokenAfter(deviceBrokenAfter) {}
+
+void DeviceReader::read()
 {
-  stop();
-  join();
+  std::thread thr([this]() {
+    this->readingLoop();
+  });
+  thr.detach();
 }
 
-void DeviceReader::start() 
+void DeviceReader::readingLoop()
 {
-  if (this->m_running.load()) return;
-    
-  this->m_running.store(true);
-  this->m_readerThread = std::thread(&DeviceReader::readingLoop, this);
-}
+  std::shared_ptr<const Event> startEv(new StartedEvent(this->m_dev));
+  startEv->toString();
+  this->m_queue->push(startEv);
 
-void DeviceReader::stop() 
-{
-  this->m_running.store(false);
-  if (this->m_device) 
+  while(this->m_dev->getReadCount() < this->m_deviceBrokenAfter)
   {
-    this->m_device->stop();
+    if(this->m_dev->getName() == "DeviceA")
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    else if(this->m_dev->getName() == "DeviceB")
+    {
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+    std::shared_ptr<const Event> dataEv(new DataEvent(this->m_dev));
+    this->m_dev->read();
+    dataEv->toString();
+    this->m_queue->push(dataEv);
   }
-}
 
-void DeviceReader::join() 
-{
-  if (this->m_readerThread.joinable()) 
-  {
-    this->m_readerThread.join();
-  }
-}
-
-void DeviceReader::readingLoop() 
-{
-  try {
-    this->m_eventQueue->push(std::make_shared<StartedEvent>(this->m_device));
-        
-    while (this->m_running.load() && this->m_device->isWorking()) 
-    {
-      bool success = this->m_device->read();
-      
-      if (success && this->m_running.load()) 
-      {
-        this->m_eventQueue->push(std::make_shared<DataEvent>(this->m_device));
-      } else 
-      {
-        break;
-      }
-    }
-        
-    if (this->m_running.load()) 
-    {
-      this->m_eventQueue->push(std::make_shared<WorkDoneEvent>(this->m_device));
-    }
-        
-    } catch (const std::exception& e) 
-    {
-      std::cerr << "Ошибка в потоке чтения " << this->m_device->getName() << ": " << e.what() << std::endl;
-    }
+  this->m_dev->stop();
+  std::shared_ptr<const Event> doneEv(new WorkDoneEvent(this->m_dev));
+  doneEv->toString();
+  this->m_queue->push(doneEv);
 }

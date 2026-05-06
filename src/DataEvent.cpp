@@ -3,7 +3,8 @@
 DataEvent::DataEvent(std::shared_ptr<Device> device) 
     : DeviceEvent(device) {}
 
-std::string DataEvent::toString() const 
+std::string DataEvent::toString() const
 {
-    return "Data from " + m_device->getName() + ": " + m_device->getDataAsString();
+    this->m_data->setData(this->m_device->getDataAsString());
+    return this->m_data->getData();
 }

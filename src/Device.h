@@ -1,15 +1,22 @@
 #pragma once
 
 #include <string>
-#include <memory>
+#include <atomic>
 
-class Device 
+class Device
 {
 public:
-  virtual ~Device() = default;
-  virtual std::string getName() const = 0;
-  virtual std::string getDataAsString() const = 0;
-  virtual bool read() = 0;
-  virtual bool isWorking() const = 0;
+  Device(std::string name);
+
+  virtual std::string getName() = 0;
+  virtual std::string getDataAsString() = 0;
+  virtual void read() = 0;
+  virtual bool isWorking() = 0;
   virtual void stop() = 0;
+  virtual int getReadCount() = 0;
+
+protected:
+  std::string m_name;
+  std::atomic<bool> m_working;
+  std::atomic<int> m_readCount;
 };

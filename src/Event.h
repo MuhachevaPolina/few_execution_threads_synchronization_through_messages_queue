@@ -2,9 +2,8 @@
 
 #include <string>
 
-class Event 
+class Event
 {
 public:
   virtual std::string toString() const = 0;
-  virtual ~Event() = default;
 };
